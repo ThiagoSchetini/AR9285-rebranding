@@ -1,13 +1,20 @@
-# Wireless card rebranding
-The idea here is to use a Atheros AR9285 wireless card, and make it look like a Intel Centrino Advanced-N 6205 Wireless card.  
-We do this by modifying the EEPROM card. We copy the vendor/device/subsystem IDs of the Intel card into the EEPROM Atheros card.
+# Dual Band wireless card rebranding for thinkpad T430
+The idea here is to use a Atheros AR5BHB92 AR9280 wireless card, and make it bypass x30 thinkpads whitelist (tested only on T430)
+We do this by modifying the EEPROM card. We gonna change the ProductID, SubProductID and SubVendorID
 
-My setup:
- - Lenovo Thinkpad X230 with BIOS whitelist (v2.67), and MacOS Sierra and its original Centrino Advanced-N 6205 wireless card.
- - Spared Laptop with no restriction, and Ubuntu 16.04.2, and Atheros AR9285 wireless card.
+# How to buy this card exactly?
+I've bought from this link, i recomend to buy exactly the same one. 
+https://www.aliexpress.com/item/AR5BHB92-AR9280-Dual-Band-2-4G-5GHz-802-11a-b-g-n-300Mbps-WiFi-Wireless-Network/32792736484.html?spm=a2g0s.13010208.99999999.262.jRvcby
 
-From now on, we'll use the spared laptop.  
-First we need to identify both wireless cards. We start with the Centrino Advanced-N 6205 by putting it inside the spared laptop.  
+Link not working anymore?
+Please, try searching for: AR5BHB92 AR9280 Dual-Band waelab
+Look for the one that has the waelab brand on it
+
+The setup:
+You gonna need a Laptop with no wifi restriction, Ubuntu, and with the Atheros wireless card.
+Again, we're going to use Ubuntu as OS
+
+First we need to identify the wireless cards
 Then, in terminal:  
 `lspci`  
 This will give us the pci slot used by the cards, for me: 03:00.0  
