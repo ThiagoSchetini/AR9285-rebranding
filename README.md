@@ -1,42 +1,46 @@
-# Dual Band AR5BHB92 wireless card rebranding for thinkpad T430
-The idea here is to use a dual band Atheros AR5BHB92 AR9280 wireless card, and make it bypass x30 thinkpads whitelist (tested only on T430)
+# Dual Band AR5BHB92 wireless card rebranding for thinkpad
 
-We do this by modifying the EEPROM card. We gonna change the ProductID, SubProductID and SubVendorID to another
-Atheros Card that passes on whitelist of Thinkpad T430. Yes, that exists!
+The idea here is to use a dual band Atheros AR5BHB92 AR9280 wireless card, and make it bypass thinkpads whitelist (warning: tested only on my T430)
+
+Good News!
+There is an Atheros that passes on Thinkpad t430 whitelist! I think that it works too on x230, w530 ...
+`168C:002B:17AA:30A1`
+
+How To?
+We gonna modify the EEPROM of our AR5BHB92 to become this card. We gonna change the ProductID, SubProductID and SubVendorID to another one.
 
 
 # How to buy this card exactly?
-I've bought from this link, i recomend to buy exactly the same one. 
-https://www.aliexpress.com/item/AR5BHB92-AR9280-Dual-Band-2-4G-5GHz-802-11a-b-g-n-300Mbps-WiFi-Wireless-Network/32792736484.html?spm=a2g0s.13010208.99999999.262.jRvcby
+
+I've bought from this link, i recomend to buy exactly the same one:
+`https://www.aliexpress.com/item/AR5BHB92-AR9280-Dual-Band-2-4G-5GHz-802-11a-b-g-n-300Mbps-WiFi-Wireless-Network/32792736484.html?spm=a2g0s.13010208.99999999.262.jRvcby`
 
 Link not working anymore?
-Please, try searching for: AR5BHB92 AR9280 Dual-Band waelab
-Look for the one that has the waelab brand on it
+Please, try searching for this term on Ali Express, look for the one that has the waelab brand on it:
+`AR5BHB92 AR9280 Dual-Band waelab`
 
-The setup with Ubuntu:
-You gonna need a Laptop with no wifi restriction, Ubuntu OS (any version), and with the Atheros wireless card.
+You need the Ubuntu OS to make this!
+You gonna need a Laptop with no wifi restriction, Ubuntu OS (any version), and of course, with the Atheros wireless card pluged in (and only this please)
 
 
 # The easiest way ever!
-Considering the files on this repository, the iwleeprom is compiled, patched and ready to use!
+
 I prepared this easy way only for AR5BHB92 of the Ali Express link, okay?
+
+Considering the files on this repository, the iwleeprom is compiled, patched and ready to use!
 
 Inside the iwleeprom folder, using iwleeprom tool:  
 `sudo ./iwleeprom -i ../AR5BHB92-eprom/patched.eeprom`  
 
-Youŕe gonna see some messages like
-Saving dump with byte order: LITTLE ENDIAN
-0000 [............................XX..................................]
-0f80 [............................XX..................................]
-... 
+You're gonna see some messages of the write process. Some [.....X...] where X are the mods
 ... and some success write message on the final
 
-Now our AR9285 card is patched and ready. We put it back in the Thinkpad , and boot it. You should not see any warning from the BIOS.  
+That's all folks!
 
-No, you don need the FAKE-PCI...kext, only the toleda kext for atheros. Visit my t430 hackintosh repository:  
+Your card is patched and ready! Put it back in the Thinkpad, and boot it. You don need the FAKE-PCIID...kext, you need only the toleda kext for atheros. Visit my t430 hackintosh repository:  
 `https://github.com/ThiagoSchetini/macosx-thinkpad-t430`  
 
-Your rebranded wireless works on Linux and probably on Windows too =)
+Note that your card still works on another OS like Linux and probably on Windows, because, it's an Atheros yet! 
 
 
 # Another AR928x? Try the hard way, it's how i did it!
@@ -61,9 +65,9 @@ E: ID_PCI_SUBCLASS_FROM_DATABASE=Network controller
 E: ID_VENDOR_FROM_DATABASE=Qualcomm Atheros
 E: MODALIAS=pci:v0000168Cd0000002Bsv000017AAsd000030A1bc02sc80i00
 E: PCI_CLASS=28000
-E: PCI_ID=168C:002B
+E: PCI_ID=168C:002A
 E: PCI_SLOT_NAME=0000:03:00.0
-E: PCI_SUBSYS_ID=17AA:30A1
+E: PCI_SUBSYS_ID=144F:7156
 E: SUBSYSTEM=pci
 ```
 This command give us enough informations about the card. We are interested in the PCI_ID and PCI_SUBSYS_ID. We'll modify both of them.  
@@ -71,8 +75,10 @@ This command give us enough informations about the card. We are interested in th
 ```
 We save those informations somewhere.  
 So finally we have:  
-- PCI_ID 168C:002B will become 8086:0085  
-- PCI_SUBSYS_ID 1A3B:1089 will become 8086:1311  
+- PCI_ID 168C:002A will become 168C:002B  
+- PCI_SUBSYS_ID 144F:7156 will become 17AA:30A1 
+
+TIP: If your card have different ID's, don't worry. Use the same logic and you gonan have the same result!
 
 Now we will dump the AR9285 EEPROM into a file, modify that file(to make it look like whitelist Atheros), and copy it back to the wireless card.  
 We need a few tools.  
@@ -152,30 +158,29 @@ We keep the original intact, and we'll work on a copy:
 
 Now it's time to open the eeprom dump file with ghex, find and replace vendor/device/subsystem IDs:  
 `ghex AR9285-patched.eeprom`  
-In the menu `"View" --> "Group Data As" --> "Words"`, it's just a preference.  
 
 Now something IMPORTANT, the eeprom dump file is byte-flipped, which means, if we want to look for "168C", we will look for "8C16".  
-So from:  
-- PCI_ID 168C:002B  will become 8086:0085
-- PCI_SUBSYS_ID 1A3B:1089 will become 8086:1311
 
-We obtain:  
-- PCI_ID 8C16:2B00  will become 8680:8500
-- PCI_SUBSYS_ID 3B1A:8910 will become 8680:1113
+- PCI_ID 
 
-And a bit more clearly:  
-- find 8C162B00       replace by 86808500
-- find 3B1A8910       replace by 86801113
+168C:002A look for 8C 16 2A 00 replace by 8C 16 2B 00 (only the B changed on this case)
 
-Don't forget, sometimes there are 2 OCCURENCES of each to find and replace by.  
-Then save file.  
+- PCI_SUBSYS_ID 
+
+144F look for 4F 14 replace by A1 30
+
+7156 look for 56 71 replace by AA 17 
+
+WARNING: sometimes there are 2 OCCURENCES of each to find and replace by.
 
 And now we write back the modified eeprom dump file into the wireless card, using iwleeprom tool:  
 `sudo ./iwleeprom -i AR9285-patched.eeprom`  
 
 Now our AR9285 card is patched and ready. We put it back in the Thinkpad T430, and boot it. You should not see any warning from the BIOS.  
 
-No, you don need the FAKE-PCI...kext, only the toleda kext for atheros. Visit my t430 hackintosh repository:  
+That's all!
+
+Your card is patched and ready! Put it back in the Thinkpad, and boot it. You don need the FAKE-PCIID...kext, you need only the toleda kext for atheros. Visit my t430 hackintosh repository:  
 `https://github.com/ThiagoSchetini/macosx-thinkpad-t430`  
 
-Your rebranded wireless works on Linux and probably on Windows too =)
+Note that your card still works on another OS like Linux and probably on Windows, because, it's an Atheros yet! 
