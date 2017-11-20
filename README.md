@@ -10,7 +10,7 @@ There is an Atheros that passes on Thinkpad t430 whitelist! I think that it work
 
 How To?
 
-We're gonna modify the EEPROM of our AR5BHB92 to become this card with the code above!	
+We're gonna modify the EEPROM of our AR5BHB92 to become this card with the ID's above!	
 
 
 # How to buy this card exactly?
@@ -20,11 +20,13 @@ I've bought from this link, i recomend to buy exactly the same one:
 `https://www.aliexpress.com/item/AR5BHB92-AR9280-Dual-Band-2-4G-5GHz-802-11a-b-g-n-300Mbps-WiFi-Wireless-Network/32792736484.html?spm=a2g0s.13010208.99999999.262.jRvcby`
 
 Link not working anymore?
+
 Please, try searching for this term on Ali Express, look for the one that has the waelab brand on it:
 
 `AR5BHB92 AR9280 Dual-Band waelab`
 
 You need the Ubuntu OS to make this!
+
 You gonna need a Laptop with no wifi restriction, Ubuntu OS (any version), and of course, with the Atheros wireless card pluged in.
 
 
